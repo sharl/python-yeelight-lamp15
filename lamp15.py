@@ -14,7 +14,15 @@ class Lamp15:
         self.host = host
         self.port = port
         self.timeout = timeout
+        self.sock = None
         self._id = 0
+
+    def _connect(self):
+        if not self.sock:
+            self.sock = socket.create_connection(
+                (self.host, self.port),
+                timeout=self.timeout,
+            )
 
     def _command(self, method: str, params: list[Any]) -> Any:
         self._id += 1
@@ -30,23 +38,26 @@ class Lamp15:
             + '\r\n'
         ).encode('utf-8')
 
-        with socket.create_connection(
-            (self.host, self.port),
-            timeout=self.timeout,
-        ) as sock:
-            sock.sendall(data)
+        if not self.sock:
+            self._connect()
+
+        try:
+            self.sock.sendall(data)
 
             response = b''
             while b'\r\n' not in response:
-                chunk = sock.recv(4096)
+                chunk = self.sock.recv(4096)
                 if not chunk:
                     break
                 response += chunk
 
-        if not response:
-            return None
+            if not response:
+                return None
 
-        return json.loads(response.split(b'\r\n', 1)[0])
+            return json.loads(response.split(b'\r\n', 1)[0])
+        except Exception:
+            self.sock.close()
+            self.sock = None
 
     @staticmethod
     def _rgb(r: int, g: int, b: int) -> int:
