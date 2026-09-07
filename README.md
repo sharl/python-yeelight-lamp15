@@ -13,6 +13,6 @@ only specific Yeelight LED Screen Light Bar Pro (lamp15 / YLTD003) control
 {'method': 'props', 'params': {'bg_power': 'off'}}
 >>> lamp.rear_on()
 {'id': 2, 'result': ['ok']}
->>> lamp.segments((255, 0, 0), (0, 0, 255))
+>>> lamp.segments((0, 0, 255), (255, 0, 0))
 {'id': 3, 'result': ['ok']}
 ```
