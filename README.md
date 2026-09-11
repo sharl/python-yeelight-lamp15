@@ -16,3 +16,7 @@ only specific Yeelight LED Screen Light Bar Pro (lamp15 / YLTD003) control
 >>> lamp.segments((0, 0, 255), (255, 0, 0))
 {'id': 3, 'result': ['ok']}
 ```
+
+## SEE ALSO
+
+[Overview – Yeelight Client](https://numberonebot.github.io/yeelight-client/)
